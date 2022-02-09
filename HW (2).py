@@ -32,6 +32,9 @@ class Fish:
     weight_of_fish_in_kg = 3.2
     fish_names_list = ["Salmon", "Tuna", "Carp", "Cod", "Swordship"] # Example of a list(list is ordered, changeable)
 
+    def __str__(self) -> str:
+        return "Fish Info, name: {0}, origin: {1}, price = {2}".format(self.name_of_fish, self.origin, self.price)
+    
     def sell_fish(self, name_of_fish):  # Relevant function if only I was a fish shop
         self.name_of_fish = name_of_fish
 
@@ -48,8 +51,10 @@ class Fish:
         self.sentence_about_bought_fish = "3 boxes of " + bought_fish + " have been bought."
         print(self.sentence_about_bought_fish)
 
-    def __init__(self, name_of_fish) -> None:
+    def __init__(self, name_of_fish, origin = "Norway", price = 0) -> None:
         self.name_of_fish = name_of_fish
+        self.origin = origin
+        self.price = price
 
         self.name = "oseledets"
         self.price_in_uah_per_kilo = 11.2
@@ -171,3 +176,74 @@ bought_tuna.print_bought_fish("tuna")
 
 roach = FishShop("Roach")  # Example of method
 roach.add_fish("Roach", 0.4)  # (name, weight)
+
+
+def work_with_dict(): # Example of dictionary(you can't sort it)
+    fishes_dict = {"shark": Fish(name_of_fish = "shark"),
+    "salmon": Fish(price = 12, name_of_fish = "salmon"),
+    "tuna": Fish("tuna", "Netherlands", 100.9)}
+
+    print(fishes_dict)
+
+    fish_list = []
+    for fish_name, fish in fishes_dict.items():
+        fish_list.append( (fish_name, fish.price, fish) )
+
+    fish_list.sort(key = lambda fish_tuple: fish_tuple[1], reverse = True ) # lambda - with what we're working(tuple) 
+    
+    for fish_info in fish_list:
+        name, price, fish = fish_info
+        print("name: {0} price: {1}".format(name, price))
+
+    print(fishes_dict.items())
+
+    # print(fishes_dict.values().sort) ?Isn't working
+
+work_with_dict()
+
+for idx in range(0, 100):
+    print(idx)
+
+print ("built-in functions in python")
+my_array = [3, 5, 45, 89, -5, 9, 3000]
+print(min(my_array))
+print(max(my_array))
+
+if 398 not in my_array:
+    print("hooray")
+else:
+    print("sadness")
+
+print(my_array.count(5))
+
+print(len(my_array))
+
+print(my_array[1 : 3]) # From 1 to 3
+print("orybe@somecompany.com"[:5]) # From 0 to 5
+print("orybe@somecompany.com"[6:])
+
+mail = "orybe@somecompany.com"
+my_array[:5] = "P" # From 0 to 5 every element is 'P' 
+print(my_array[-1]) # 0 = '3000', -1 = '9' 
+
+print(my_array[1::2]) # Print every 2-nd element
+
+# sequence[start_position : end_position : step] (STRUCTURE)
+
+result = []
+for idx in range(0, 100):
+    result.append(1) # Add new element
+
+another_result = [1 for _ in range (0, 100)] # 'List comprehension'
+
+one_more_list = [1] * 100 # Equivalent
+
+print(another_result) # Evere element is '1'
+
+print(list("another list")) # 1-st element is 'a', 2-nd is 'n'...
+
+my_set = set() # Creating a set
+my_another_set = {1, 3, 5} # Equialent as above( {} )
+
+my_list = [1, 3, 5]
+my_tuple = (1, 3, 5) # Or just '1, 3, 5'
