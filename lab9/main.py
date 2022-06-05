@@ -1,5 +1,5 @@
 # Importing necessary stuff
-from digital_elements import BinaryCounter, ReverseCounter, Multiplexer, DelayFlipFlop, RSFlipFlop, ShiftRegister
+from lab9.digital_elements import BinaryCounter, ReverseCounter, Multiplexer, DelayFlipFlop, RSFlipFlop, ShiftRegister
 
 
 def main():
