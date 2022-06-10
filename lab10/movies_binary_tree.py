@@ -57,7 +57,7 @@ class Tree:
                 node.right = Node(value)
 
     # Finding tree node(logic)
-    def find(self, value: int) -> None:
+    def find(self, value: int):
         if self.root is not None:  # Finding elements in our bt if only bt root exists
             self._find(value, self.root)
         else:
@@ -66,6 +66,8 @@ class Tree:
     # Finding tree node(realization)
     def _find(self, value: int, node: Node) -> Node:
         if value == node.value:
+            print(f"{node} - found node")
+
             return node
 
         # Left node
@@ -116,7 +118,7 @@ class Tree:
         return node.value
 
     # Main deleting func(using 'successor' and 'predecessor' functions here)
-    def delete_node(self, node: Node, key: int) -> None | Node:
+    def delete_node(self, node: Node, key: int) -> None | str:
         if not node:
             return None
 
@@ -145,4 +147,47 @@ class Tree:
                 node.value = self.predecessor(node)
                 node.left = self.delete_node(node.left, node.value)
 
-        return node
+        return f"{node} - node has been deleted"
+
+    # Deleting nodes(movies) with the same studio
+    def delete_nodes_with_same_studio(self, node: Node, key: int, studio: str) -> None | str:
+        if studio == node.studio:  # Checking if node's studios are the same
+
+            # Then using our 'delete_node()' method
+            if not node:
+                return None
+
+            # Deleting right node
+            if key > node.value:
+                node.right = self.delete_node(node.right, key)  # Using recursion
+
+            # Deleting left node
+            elif key < node.value:
+                node.left = self.delete_node(node.left, key)
+
+            else:
+
+                # If our node is a leaf
+                if not node.left or node.right:
+                    node = None
+
+                # If our node has right child
+                elif node.right:
+
+                    node.value = self.successor(node)  # Changing our tree
+                    node.right = self.delete_node(node.right, node.value)
+
+                # If our node has left child
+                else:
+                    node.value = self.predecessor(node)
+                    node.left = self.delete_node(node.left, node.value)
+
+        # If there aren't any appropriate nodes - printing info about it
+        else:
+            print("There aren't movies with the same studio")
+
+        return f"{node} - node with the same movie studio has been deleted"
+
+    # Printing movies with the same genre
+    def print_nodes_with_same_genre(self, genre: str) -> None:
+        pass

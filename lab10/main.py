@@ -31,9 +31,16 @@ def main():
 
     print("------------------------")
 
+    # Deleting nodes with the same movie studio
+    print(bt.delete_nodes_with_same_studio(n1, 3, "Paramount Pictures"))
+
     # Deleting exact node
-    print(bt.delete_node(n4, 2))
+    print(bt.delete_node(n4, 8))
     bt.print_tree()
+
+    print("------------------------")
+
+    bt.print_nodes_with_same_genre("adventure")
 
     print("------------------------")
 
