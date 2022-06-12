@@ -10,7 +10,7 @@ class Node:
         self.genre = genre
         self.studio = studio
 
-        # Value
+        # Key
         self.value = value
 
         # Children
@@ -20,7 +20,7 @@ class Node:
     # Representing our node obj
     def __str__(self) -> str:
         return (f"'{self.name}' was released in {self.release_year}. Duration: {self.duration_in_hours} hours."
-                f" It's {self.genre} from {self.studio}")
+                f" It's {self.genre} from '{self.studio}'")
 
 
 # Binary tree
@@ -30,7 +30,7 @@ class Tree:
     def __init__(self) -> None:
         self.root = None  # Necessary root
 
-    # Adding nodes to bt(logic)
+    # Adding nodes to bt
     def add(self, value: int, node: Node) -> None:
         if self.root is None:
             self.root = Node(value)
@@ -39,7 +39,6 @@ class Tree:
 
         print(f"{node} - node has been added")
 
-    # Adding nodes to bt(realization)
     def _add(self, value: int, node: Node) -> None:
 
         # Left node here
@@ -56,17 +55,20 @@ class Tree:
             else:
                 node.right = Node(value)
 
-    # Finding tree node(logic)
-    def find(self, value: int):
-        if self.root is not None:  # Finding elements in our bt if only bt root exists
-            self._find(value, self.root)
+    # Finding tree node
+    def find(self, value: int) -> int | None:
+
+        # Finding elements in our bt if only bt root exists
+        if self.root is not None:
+            if (found_value := self._find(value, self.root)) is not None:  # Returning value only if node is not None
+                return found_value.value
+            else:
+                return None
         else:
             return None
 
-    # Finding tree node(realization)
     def _find(self, value: int, node: Node) -> Node:
         if value == node.value:
-            print(f"{node} - found node")
 
             return node
 
@@ -82,14 +84,13 @@ class Tree:
     def delete_tree(self) -> None:
         self.root = None  # Garbage collector will do this for us
 
-    # Printing bt(logic)
+    # Printing bt
     def print_tree(self) -> None:
-        print("Binary tree")
+        print("Binary tree:")
 
         if self.root is not None:
             self._print_tree(self.root)
 
-    # Printing bt(realization)
     def _print_tree(self, node: Node) -> None:
 
         # Rendering binary tree
@@ -99,95 +100,75 @@ class Tree:
             self._print_tree(node.right)
 
     # Deleting node
-    @staticmethod
-    def successor(node: Node) -> int:  # Successor of node
-        node = node.right
+    def delete_node(self, root: Node, key: int) -> Node | None:
+        if not root:
+            return None
 
-        while node.left:
-            node = node.left
+        # If key less than value - deleting left node
+        if root.value > key:
+            root.left = self.delete_node(root.left, key)
 
-        return node.value
+        # If key is bigger than value - deleting right node
+        elif root.value < key:
+            root.right = self.delete_node(root.right, key)
 
-    @staticmethod
-    def predecessor(node: Node) -> int:  # Predecessor of node
-        node = node.left
+        # If key = node value
+        else:
 
-        while node.right:
-            node = node.right
+            # Checking node for right/left child
+            if not root.right:
+                return root.left
+            if not root.left:
+                return root.right
 
-        return node.value
+            # If both children exist
+            temp_val = root.right
+            min_val = temp_val.value
+            while temp_val.left:
+                temp_val = temp_val.left
+                min_val = temp_val.value
 
-    # Main deleting func(using 'successor' and 'predecessor' functions here)
-    def delete_node(self, node: Node, key: int) -> None | str:
+            # Deleting min right node
+            root.right = self.delete_node(root.right, root.value)
+
+        return root
+
+    # Printing all the nodes(bt)
+    def pre_order(self, node: Node) -> None:
         if not node:
             return None
 
-        # Deleting right node
-        if key > node.value:
-            node.right = self.delete_node(node.right, key)  # Using recursion
+        # If node exists
+        print(node.value)
 
-        # Deleting left node
-        elif key < node.value:
-            node.left = self.delete_node(node.left, key)
+        # Doing so for right/left children
+        self.pre_order(node.left)
+        self.pre_order(node.right)
 
-        else:
+    # Deleting movies(nodes) with the same studio using 'delete_node' method
+    def delete_nodes_with_same_studio(self, root: Node, node_ex: Node, studio: str) -> Node | None:
+        if not root:
+            return None
 
-            # If our node is a leaf
-            if not node.left or node.right:
-                node = None
-
-            # If our node has right child
-            elif node.right:
-
-                node.value = self.successor(node)  # Changing our tree
-                node.right = self.delete_node(node.right, node.value)
-
-            # If our node has left child
-            else:
-                node.value = self.predecessor(node)
-                node.left = self.delete_node(node.left, node.value)
-
-        return f"{node} - node has been deleted"
-
-    # Deleting nodes(movies) with the same studio
-    def delete_nodes_with_same_studio(self, node: Node, key: int, studio: str) -> None | str:
-        if studio == node.studio:  # Checking if node's studios are the same
-
-            # Then using our 'delete_node()' method
-            if not node:
-                return None
-
-            # Deleting right node
-            if key > node.value:
-                node.right = self.delete_node(node.right, key)  # Using recursion
-
-            # Deleting left node
-            elif key < node.value:
-                node.left = self.delete_node(node.left, key)
-
-            else:
-
-                # If our node is a leaf
-                if not node.left or node.right:
-                    node = None
-
-                # If our node has right child
-                elif node.right:
-
-                    node.value = self.successor(node)  # Changing our tree
-                    node.right = self.delete_node(node.right, node.value)
-
-                # If our node has left child
-                else:
-                    node.value = self.predecessor(node)
-                    node.left = self.delete_node(node.left, node.value)
-
-        # If there aren't any appropriate nodes - printing info about it
+        if node_ex.studio == studio:
+            self.delete_node(root, node_ex.value)
         else:
             print("There aren't movies with the same studio")
 
-        return f"{node} - node with the same movie studio has been deleted"
+        # Using recursion
+        self.delete_nodes_with_same_studio(root.right, node_ex, studio)
+        self.delete_nodes_with_same_studio(root.left, node_ex, studio)
+
+        return root
 
     # Printing movies with the same genre
-    def print_nodes_with_same_genre(self, genre: str) -> None:
-        pass
+    def print_nodes_with_same_genre(self, root: Node, genre: str) -> None:
+        if not root:
+            return None
+
+        if root.genre == genre:
+            print(root.value)
+
+        # Doing so for right/left children
+        self.print_nodes_with_same_genre(root.left, genre)
+        self.print_nodes_with_same_genre(root.right, genre)

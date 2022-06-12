@@ -2,45 +2,55 @@ from movies_binary_tree import Tree, Node
 
 
 def main():
-    # Creating binary tree
     bt = Tree()
 
-    # Creating some nodes
-    n1 = Node(3, "Interstellar", 2014, 3, "science fiction", "Paramount Pictures")
-    n2 = Node(4, "Forrest Gump", 1994, 2, "tragicomedy", "Paramount Pictures")
-    n3 = Node(0, "The Lord of Rings: The Fellowship of the Ring", 2001, 3, "adventure", "New Line Cinema")
-    n4 = Node(8, "Shutter island", 2010, 2, "thriller", "Paramount Pictures")
-    n5 = Node(2, "The Lord of Rings: The Two Towers", 2002, 3, "adventure", "New Line Cinema")
+    root = Node(5)  # Root
+    root.left = Node(3, "Interstellar", 2014, 3, "science fiction", "Paramount Pictures")
+    root.right = Node(4, "Forrest Gump", 1994, 2, "tragicomedy", "Paramount Pictures")
+    root.left.left = Node(0, "The Lord of Rings: The Fellowship of the Ring", 2001, 3, "adventure", "New Line Cinema")
+    root.left.right = Node(8, "Shutter island", 2010, 2, "thriller", "Paramount Pictures")
+    root.left.right.left = Node(2, "The Lord of Rings: The Two Towers", 2002, 3, "adventure", "New Line Cinema")
 
-    # Adding nodes
-    bt.add(3, n1)
-    bt.add(4, n2)
-    bt.add(0, n3)
-    bt.add(8, n4)
-    bt.add(2, n5)
+    bt.add(5, root)
+    bt.add(3, root.left)
+    bt.add(4, root.right)
+    bt.add(0, root.left.left)
+    bt.add(8, root.left.right)
+    bt.add(2, root.left.right.left)
 
-    print("------------------------")  # Printing line for better reading the output
+    print("------------------------")
 
     bt.print_tree()
 
     print("------------------------")
 
-    # Printing the output of find function
     print(bt.find(3))
     print(bt.find(10))
 
     print("------------------------")
 
-    # Deleting nodes with the same movie studio
-    print(bt.delete_nodes_with_same_studio(n1, 3, "Paramount Pictures"))
+    # Printing bt
+    print("Original node:")
+    bt.pre_order(root)
 
-    # Deleting exact node
-    print(bt.delete_node(n4, 8))
-    bt.print_tree()
+    # Deleting specified node
+    result = bt.delete_node(root, 3)
+
+    # Checking bt
+    print("After deleting:")
+    bt.pre_order(result)
 
     print("------------------------")
 
-    bt.print_nodes_with_same_genre("adventure")
+    result = bt.delete_nodes_with_same_studio(root, root.left.right, "Paramount Pictures")
+
+    print("After deleting movies with the same studio:")
+    bt.pre_order(result)
+
+    print("------------------------")
+
+    print("Movies with the same genre:")
+    bt.print_nodes_with_same_genre(result, "adventure")
 
     print("------------------------")
 
