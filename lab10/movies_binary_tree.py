@@ -93,7 +93,7 @@ class Tree:
 
     def _print_tree(self, node: Node) -> None:
 
-        # Rendering binary tree
+        # Rendering binary tree(level order traversal)
         if node is not None:
             self._print_tree(node.left)
             print(node.value)
@@ -126,15 +126,15 @@ class Tree:
             min_val = temp_val.value
             while temp_val.left:
                 temp_val = temp_val.left
-                min_val = temp_val.value
+                min_val = temp_val.value  # Min value
 
             # Deleting min right node
             root.right = self.delete_node(root.right, root.value)
 
         return root
 
-    # Printing all the nodes(bt)
-    def pre_order(self, node: Node) -> None:
+    # Printing bt(preorder traversal)
+    def preorder(self, node: Node) -> None:
         if not node:
             return None
 
@@ -142,8 +142,8 @@ class Tree:
         print(node.value)
 
         # Doing so for right/left children
-        self.pre_order(node.left)
-        self.pre_order(node.right)
+        self.preorder(node.left)
+        self.preorder(node.right)
 
     # Deleting movies(nodes) with the same studio using 'delete_node' method
     def delete_nodes_with_same_studio(self, root: Node, node_ex: Node, studio: str) -> Node | None:
